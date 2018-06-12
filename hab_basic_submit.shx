@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+# Simple Matlab submit script for Slurm.
+#
+#
+#SBATCH -A g_account_g                 # The account name for the job.
+#SBATCH -J g_jobname_g           # The job name.
+#SBATCH -t g_walltime_g                  # The time the job will take to run. hours:minutes:seconds
+#SBATCH --mem-per-cpu=g_mem_g        # The memory the job will use per cpu core.
+#SBATCH -c g_n_par_g
+#SBATCH --mail-type=g_mail_type_g
+#SBATCH --mail-user=g_mail_user_g
+
+module load matlab
+
+echo "Launching an Matlab run"
+date
+
+#Command to execute Matlab code sub,ddx,path,param,pc
+export MATLAB_PREFDIR=g_MATLAB_PREFDIR_g
+export TZ=America/New_York
+matlab -nosplash -nodisplay -nodesktop -r "g_matlabFunc_g" # > matoutfile
+
+# End of script
