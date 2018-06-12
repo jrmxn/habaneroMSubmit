@@ -52,7 +52,7 @@ try
     command = sprintf('[ -d "%s" ] && echo "%s"',fullfile(remotePath_user_workdir,[matname]),doesex);
     [ssh2_struct, command_result] = ssh2_command(ssh2_struct, command, false);
     target_exists = strcmpi(command_result{1},doesex);
-    if not(target_exists),ssh2_struct = ssh2_close(ssh2_struct);error('Folder does not exist');end
+    if not(target_exists),ssh2_struct = ssh2_close(ssh2_struct);error('Folder does not exist remotely.');end
     %%
     fprintf('Creating archive remotely...\n');
     command = sprintf('tar -C %s -cvf %s %s',fullfile(remotePath_user_workdir,matname),tar_file,matresult);
@@ -77,6 +77,7 @@ try
     rmdir(localPath,'s');
     fprintf('Done.\n');
 catch er
+    fprintf('Rethrowing error...\n');
     ssh2_struct = ssh2_close(ssh2_struct);
     rethrow(er);
 end
