@@ -2,14 +2,12 @@
 Introduction
 ************
 
-:Author:
-:Contact: 
-:Web site:
-:Github:
-:Mailing list:
-:Copyright:
-:License:
+:Author: James McIntosh
 :Version: 0.0.1
+.. :Contact: 
+   :Copyright:
+   :License:
+
 
 Purpose
 =======
@@ -42,12 +40,3 @@ If project1 results are being written (for example) to folder 'sim' in 'project1
 .. code-block:: matlab
 
    hab_recover(columbia_id,account_type,'sim','project1');
-       
-Full Submit
-=======
-This is much more involved, and requires the user to move files and folders manually (for running projects once fully tested).
-Works something like this:
-#. ) When the local python script is called it writes several bash scripts (by swapping out variables in the .shx template file) which are each submitted using slurm. Each bash script has settings for the HPC module environment, as well as to call a local matlab function (which sets up the matlab environment).
-#. ) When the local matlab function is called, it adds other required directories to the path, points towards the project directory, starts the parallel pool and runs the required project specific matlab function with variables that were set by python in the bash script (e.g. subject name, number of runs etc.)
-
-Currently paths everywehre are based on my setup, but should be easy to swap these out for env variables.
