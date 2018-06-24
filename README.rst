@@ -11,13 +11,19 @@ Introduction
 
 Purpose
 =======
-Basic scripts to automatically submit multiple parallel jobs to Columbia's Habanero HPC.
+I was getting tired of writing custom submission scripts for every project I was working on.
+These are basic scripts to automatically submit multiple parallel jobs to Columbia's Habanero HPC.
 Includes various temporary directory settings to try to make the parallelisation more stable.
 (Each folder has submission scripts for a different project).
 
+Other info
+=======
+https://wikis.cuit.columbia.edu/confluence/display/rcs/Habanero+-+Job+Examples
+https://github.com/gaoyuanjun/hpc_tutorial
+
 Quick Submit
 =======
-Archives the folder you specify, sends it to the cluster and runs the function you specify.
+Archives the folder you specify, sends it to the cluster and runs the function you specify within that folder.
 
 Makes use of `SSH/SFTP/SCP For Matlab (v2) <https://www.mathworks.com/matlabcentral/fileexchange/35409-ssh-sftp-scp-for-matlab--v2->`_ to connect to the cluster and `findobj <https://www.mathworks.com/matlabcentral/fileexchange/14317-findjobj-find-java-handles-of-matlab-graphic-objects>`_ so that the passwords that get used don't stay in Matlab history (definitely not guaranteed). These must be added to the Matlab path for anything to work.
 It's also possible to load the password from a .mat file stored on disk (which would usually be stored encrypted).
