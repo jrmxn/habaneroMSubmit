@@ -10,6 +10,7 @@ d.force_overwrite = false;
 d.email = '';
 d.email_condition = 'NONE';%END
 d.jobname = '';
+d.remote_subdir = 'Local';%
 %%
 v = inputParser;
 addParameter(v,'n_par',d.n_par);
@@ -19,6 +20,7 @@ addParameter(v,'pw_ssh',d.pw_ssh);
 addParameter(v,'dosub',d.dosub);
 addParameter(v,'scratch_dir',d.scratch_dir);
 addParameter(v,'remotehost',d.remotehost);
+addParameter(v,'remote_subdir',d.remote_subdir);
 addParameter(v,'force_overwrite',d.force_overwrite);
 addParameter(v,'email',d.email);
 addParameter(v,'email_condition',d.email_condition);
@@ -28,7 +30,7 @@ v = v.Results;clear d;
 %%
 remotePath = fullfile(v.scratch_dir,account,'users');
 remotePath_user = fullfile(remotePath,user);
-remotePath_user_workdir = fullfile(remotePath_user,'Local');
+remotePath_user_workdir = fullfile(remotePath_user,v.remote_subdir);
 %%
 fprintf('Will try to send %s\nto HPC',matdir);
 fprintf('and run %s.m\n',matfunc);

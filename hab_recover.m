@@ -2,17 +2,19 @@ function hab_recover(user,account,matresult,matname,varargin)
 d.pw_ssh = [];
 d.scratch_dir = '/rigel';%on remote host
 d.remotehost = 'habanero.rcs.columbia.edu';
+d.remote_subdir = 'Local';
 %%
 v = inputParser;
 addParameter(v,'pw_ssh', d.pw_ssh);
 addParameter(v,'scratch_dir', d.scratch_dir);
 addParameter(v,'remotehost', d.remotehost);
+addParameter(v,'remote_subdir', d.remote_subdir);
 parse(v,varargin{:});
 v = v.Results;clear d;
 %%
 remotePath = fullfile(v.scratch_dir, account, 'users');
 remotePath_user = fullfile(remotePath, user);
-remotePath_user_workdir = fullfile(remotePath_user, 'Local');
+remotePath_user_workdir = fullfile(remotePath_user, v.remote_subdir);
 %%
 if isempty(v.pw_ssh)
     v.pw = get_password;
