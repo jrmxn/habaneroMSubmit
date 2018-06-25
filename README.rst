@@ -23,10 +23,6 @@ Other info
 https://wikis.cuit.columbia.edu/confluence/display/rcs/Habanero+-+Job+Examples
 https://github.com/gaoyuanjun/hpc_tutorial
 
-Todo
-=======
-Currently user has to make a directory called 'Local' in /rigel/users/-user-/ as in /rigel/users/-user-/Local before using. Need to make this automatic.
-
 Quick Submit
 =======
 Archives the folder you specify, sends it to the cluster and runs the function you specify within that folder.
