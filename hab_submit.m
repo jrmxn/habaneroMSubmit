@@ -74,6 +74,18 @@ if not(target_exists)||v.force_overwrite
     copyfile(matdir,locaPath_subdir);
     fprintf('Archiving it...\n');
     tar(fullfile(localPath,tar_file),locaPath_subdir);
+    %% check that the parent directory exists
+    % that is remote_subdir, which is called 'Local' by default and should
+    % be in user dir, e.g. /rigel/users/abc1234/Local
+    command = sprintf('[ -d "%s" ] && echo "%s"',...
+    fullfile(remotePath_user_workdir),positive_exist_string);
+    [ssh2_struct, command_result] = ssh2_command(ssh2_struct, command, false);
+    target_exists = strcmpi(command_result{1},positive_exist_string);
+    if not(target_exists)
+        fprintf('This directory did not exist, so making it:\n%s\n',remotePath_user_workdir);
+        command = sprintf('mkdir %s',remotePath_user_workdir);
+        [ssh2_struct, command_result] = ssh2_command(ssh2_struct, command, false);
+    end
     %%
     fprintf('Transferring archive.\n');
     ssh2_struct = scp_put(ssh2_struct, tar_file, remotePath_user_workdir, localPath, tar_file);
