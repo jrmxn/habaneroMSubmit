@@ -28,9 +28,10 @@ addParameter(v,'jobname',d.jobname);
 parse(v,varargin{:});
 v = v.Results;clear d;
 %%
-remotePath = fullfile(v.scratch_dir,account,'users');
-remotePath_user = fullfile(remotePath,user);
-remotePath_user_workdir = fullfile(remotePath_user,v.remote_subdir);
+filesep_lin = '/';
+remotePath = [v.scratch_dir, filesep_lin, account, filesep_lin, 'users'];
+remotePath_user = [remotePath, filesep_lin, user];
+remotePath_user_workdir = [remotePath_user, filesep_lin, v.remote_subdir];
 %%
 fprintf('Will try to send %s\nto HPC',matdir);
 fprintf('and run %s.m\n',matfunc);
@@ -66,7 +67,7 @@ try
     fprintf('Checking if target folder already exists...')
     positive_exist_string = 'yes';
     command = sprintf('[ -d "%s" ] && echo "%s"',...
-        fullfile(remotePath_user_workdir,[matname]),positive_exist_string);
+        [remotePath_user_workdir, filesep_lin, matname], positive_exist_string);
     [ssh2_struct, command_result] = ssh2_command(ssh2_struct, command, false);
     target_exists = strcmpi(command_result{1},positive_exist_string);
     %% If it doesn't exist tar matdir and upload it
@@ -79,7 +80,7 @@ try
         % that is remote_subdir, which is called 'Local' by default and should
         % be in user dir, e.g. /rigel/users/abc1234/Local
         command = sprintf('[ -d "%s" ] && echo "%s"',...
-            fullfile(remotePath_user_workdir),positive_exist_string);
+            remotePath_user_workdir,positive_exist_string);
         [ssh2_struct, command_result] = ssh2_command(ssh2_struct, command, false);
         target_exists = strcmpi(command_result{1},positive_exist_string);
         if not(target_exists)
@@ -92,11 +93,11 @@ try
         ssh2_struct = scp_put(ssh2_struct, tar_file, remotePath_user_workdir, localPath, tar_file);
         %%
         fprintf('Extracting archive remotely...\n');
-        command = sprintf('tar -xvf %s -C %s',fullfile(remotePath_user_workdir,tar_file), fullfile(remotePath_user_workdir));
+        command = sprintf('tar -xvf %s -C %s',[remotePath_user_workdir, filesep_lin, tar_file], remotePath_user_workdir);
         [ssh2_struct, command_result] = ssh2_command(ssh2_struct, command, false);
         %%
         fprintf('Deleting tar file remotely...\n');
-        command = sprintf('rm %s',fullfile(remotePath_user_workdir,tar_file));
+        command = sprintf('rm %s',[remotePath_user_workdir, filesep_lin, tar_file]);
         [ssh2_struct, command_result] = ssh2_command(ssh2_struct, command, false);
     else
         fprintf('Folder already present. Not overwriting.\n');
@@ -110,12 +111,13 @@ try
     hab.g_jobname_g = sprintf('%s_%s',matname,job_id);
     hab.g_account_g = account;
     hab.g_mem_g = sprintf('%dgb',v.mem);
-    hab.g_MATLAB_PREFDIR_g = fullfile(remotePath_user,'matlab_prefs',job_id,'prefs');
+    hab.g_MATLAB_PREFDIR_g = [remotePath_user, filesep_lin, 'matlab_prefs',...
+        filesep_lin, job_id, filesep_lin, 'prefs'];
     hab.g_mail_user_g = v.email;
     hab.g_mail_type_g = v.email_condition;
     
     c.m_command1 = sprintf('parpool(%s)',hab.g_n_par_g);
-    c.m_command2 = sprintf('cd %s',fullfile(remotePath_user_workdir,matname));
+    c.m_command2 = sprintf('cd %s',[remotePath_user_workdir, filesep_lin, matname]);
     c.m_command3 = sprintf('display(pwd)');
     c.m_command4 = matfunc;
     
@@ -134,12 +136,23 @@ try
     fid = fopen(fullfile(localPath,sh_file),'wt');
     fprintf(fid, '%s',X);
     fclose(fid);
+    %%
+    submit_command = sprintf('sbatch %s', [remotePath_user_workdir, filesep_lin, sh_file]);
+    %% replace line breaks if making this in windows...
+    if ispc
+        command = sprintf('sed -i.bak ''s/\\r$//'' %s', [remotePath_user_workdir, filesep_lin, sh_file]);
+        error(['Not fully implemented for windows machine.\n',...
+            'Run this manually on HPC:\n%s\n',...
+            'Followed by:\n%s\n',...
+            'This is because of DOS/UNIX line breaks - and sed command is',...
+            ' escaping incorrectly when submitted over ssh2.'],command,submit_command)
+    end
     %% upload script and submit it (sbatch command)
     fprintf('Transmitting and submitting bash script...\n');
     ssh2_struct = scp_put(ssh2_struct, sh_file, remotePath_user_workdir, localPath, sh_file);
-    command = sprintf('sbatch %s',fullfile(remotePath_user_workdir,sh_file));
     if v.dosub
-        [ssh2_struct, command_result] = ssh2_command(ssh2_struct, command, false);
+        fprintf('%s\n',submit_command);
+        [ssh2_struct, command_result] = ssh2_command(ssh2_struct, submit_command, true);
     else
         %for testing
         fprintf('Skipping actual sbatch command.\n');
