@@ -10,7 +10,7 @@ end
 %%
 username = input('Please enter username usually something like (abc1234):','s');
 account = input('Please enter account (e.g. free):','s');
-submit = false;
+submit = true;
 recover = not(submit);
 % username = 'abc1234';
 % account = 'free';
