@@ -18,8 +18,8 @@ recover = not(submit);
 matdir = pwd;%upload this directory
 matname = 'project1';%project name
 %%
-d.n_par = 3;%number of cores
-d.walltime = '00:15:00';
+d.n_par = 2;%number of cores (24 == 1 node on Habanero)
+d.walltime = '00:05:00';
 d.email_condition = 'END';
 d.email = 'email@gmail.com';
 %% the function that should run
