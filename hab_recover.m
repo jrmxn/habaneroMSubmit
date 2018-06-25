@@ -61,14 +61,19 @@ try
     command = sprintf('rm %s', tar_file);
     [ssh2_struct, command_result] = ssh2_command(ssh2_struct, command, false);
     %%
-    fprintf('Closing SSH session...\n');
-    ssh2_struct = ssh2_close(ssh2_struct);    
-    fprintf('Cleaning up temporary directory locally...\n');
-    rmdir(localPath, 's');
-    fprintf('Done.\n');
-catch er
-    fprintf('Rethrowing error...\n');
-    ssh2_struct = ssh2_close(ssh2_struct);
-    rethrow(er);
+    ssh2_struct = cleanup(ssh2_struct, localPath);
+    %%
+catch reerr
+    ssh2_struct = cleanup(ssh2_struct, localPath);
+    rethrow(reerr);
 end
+end
+
+function ssh2_struct = cleanup(ssh2_struct,localPath)
+fprintf('Closing SSH session...\n');
+ssh2_struct = ssh2_close(ssh2_struct);
+
+fprintf('Cleaning up temporary directory locally...\n');
+rmdir(localPath,'s');
+fprintf('Done.\n');
 end
