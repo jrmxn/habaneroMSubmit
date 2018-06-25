@@ -27,7 +27,9 @@ Quick Submit
 =======
 Archives the folder you specify, sends it to the cluster and runs the function you specify within that folder.
 
-Makes use of `SSH/SFTP/SCP For Matlab (v2) <https://www.mathworks.com/matlabcentral/fileexchange/35409-ssh-sftp-scp-for-matlab--v2->`_ to connect to the cluster and `findobj <https://www.mathworks.com/matlabcentral/fileexchange/14317-findjobj-find-java-handles-of-matlab-graphic-objects>`_ so that the passwords that get used don't stay in Matlab history (definitely not guaranteed). These must be added to the Matlab path for anything to work.
+Makes use of `SSH/SFTP/SCP For Matlab (v2) <https://www.mathworks.com/matlabcentral/fileexchange/35409-ssh-sftp-scp-for-matlab--v2->`_ to connect to the cluster.
+This should be downloaded and placed in the auxf directory.
+Also uses (already in auxf) `findobj <https://www.mathworks.com/matlabcentral/fileexchange/14317-findjobj-find-java-handles-of-matlab-graphic-objects>`_ so that the passwords that get used don't stay in Matlab history (definitely not guaranteed).
 It's also possible to load the password from a .mat file stored on disk (which would usually be stored encrypted).
 
 Example use:

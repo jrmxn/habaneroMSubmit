@@ -12,6 +12,10 @@ addParameter(v,'remote_subdir', d.remote_subdir);
 parse(v,varargin{:});
 v = v.Results;clear d;
 %%
+auxf_dir = mfilename('fullpath');
+auxf_dir = fullfile(fileparts(auxf_dir),'auxf');
+addpath(genpath(auxf_dir));
+%%
 filesep_unix = '/';
 if ispc
     warning('Untested on Windows');
@@ -66,19 +70,20 @@ try
     command = sprintf('rm %s', tar_file);
     [ssh2_struct, command_result] = ssh2_command(ssh2_struct, command, false);
     %%
-    ssh2_struct = cleanup(ssh2_struct, localPath);
+    ssh2_struct = cleanup(ssh2_struct, localPath, auxf_dir);
     %%
 catch reerr
-    ssh2_struct = cleanup(ssh2_struct, localPath);
+    ssh2_struct = cleanup(ssh2_struct, localPath, auxf_dir);
     rethrow(reerr);
 end
 end
 
-function ssh2_struct = cleanup(ssh2_struct,localPath)
+function ssh2_struct = cleanup(ssh2_struct,localPath,auxf_dir)
 fprintf('Closing SSH session...\n');
 ssh2_struct = ssh2_close(ssh2_struct);
-
-fprintf('Cleaning up temporary directory locally...\n');
-rmdir(localPath,'s');
-fprintf('Done.\n');
+if (exist(localPath,'dir')==7)
+    fprintf('Cleaning up temporary directory locally...\n');
+    rmdir(localPath,'s');
+end
+rmdir(genpath(auxf_dir));
 end
