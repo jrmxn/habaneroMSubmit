@@ -15,6 +15,7 @@ I was getting tired of writing custom submission scripts for every project I was
 These are basic scripts to automatically submit multiple parallel jobs to Columbia's Habanero HPC.
 Includes various temporary directory settings to try to make the parallelisation more stable.
 (Each folder has submission scripts for a different project).
+Should work with other SLURM systems but paths may require tweaking.
 
 Other info
 =======
