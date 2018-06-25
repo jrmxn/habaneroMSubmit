@@ -1,18 +1,27 @@
 clear;
+addpath('..');
+%% 
+username = input('Please enter username usually something like (abc1234):','s');
+account = input('Please enter account (e.g. free):','s');
+% username = 'abc1234';
+% account = 'free';
 %%
-addpath(fullfile(libgit,'habanero-scripts','quick_submit'));
-matdir = '/hdd/Cloud/projectX';
+matdir = pwd;%upload this directory
 matname = 'project1';%project name
 %%
-d.n_par = 24;
-d.walltime = '12:00:00';
-%%
-matfunc1 = "clear;p_ex = {'st'};ddm_run('nlrt',p_ex);";
+d.n_par = 3;%number of cores
+d.walltime = '00:15:00';
 d.email_condition = 'END';
 d.email = 'email@gmail.com';
+%% the function that should run
+% this line can be made more complex with sprintf()
+% e.g. matfunc1 = sprintf("hab_testing(%s);",subject);
 
-hab_submit('abc1111','free',matfunc,matdir,matname,'n_par',d.n_par,'walltime',d.walltime,...
-    'email_condition',d.email_condition,'email',d.email);
+matfunc = "hab_testing;";
+%% submit:
+hab_submit(username,account, matfunc, matdir, matname,...
+    'n_par', d.n_par,'walltime', d.walltime,...
+    'email_condition', d.email_condition,'email', d.email);
 %%
-% matresult = 'sim';
-% hab_recover('abc1111','free',matresult,matname);
+% matresult = 'result_directory';
+% hab_recover(username,account,matresult,matname);
