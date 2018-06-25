@@ -12,9 +12,14 @@ addParameter(v,'remote_subdir', d.remote_subdir);
 parse(v,varargin{:});
 v = v.Results;clear d;
 %%
-remotePath = fullfile(v.scratch_dir, account, 'users');
-remotePath_user = fullfile(remotePath, user);
-remotePath_user_workdir = fullfile(remotePath_user, v.remote_subdir);
+filesep_unix = '/';
+if ispc
+    warning('Untested on Windows');
+end
+%%
+remotePath = [v.scratch_dir, filesep_unix, account, filesep_unix, 'users'];
+remotePath_user = [remotePath, filesep_unix, user];
+remotePath_user_workdir = [remotePath_user, filesep_unix, v.remote_subdir];
 %%
 if isempty(v.pw_ssh)
     v.pw = get_password;
@@ -38,14 +43,14 @@ try
     %%
     positive_exist_string = 'yes';
     command = sprintf('[ -d "%s" ] && echo "%s"',...
-        fullfile(remotePath_user_workdir, [matname]), positive_exist_string);
+        [remotePath_user_workdir, filesep_unix, matname], positive_exist_string);
     [ssh2_struct, command_result] = ssh2_command(ssh2_struct, command, false);
     target_exists = strcmpi(command_result{1}, positive_exist_string);
     if not(target_exists),ssh2_struct = ssh2_close(ssh2_struct);error('Folder does not exist remotely.');end
     %%
     fprintf('Creating archive remotely...\n');
     command = sprintf('tar -C %s -cvf %s %s',...
-        fullfile(remotePath_user_workdir, matname), tar_file, matresult);
+        [remotePath_user_workdir, filesep_unix, matname], tar_file, matresult);
     [ssh2_struct, command_result] = ssh2_command(ssh2_struct, command, false);
     %%
     fprintf('Transferring archive.\n');
