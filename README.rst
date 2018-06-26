@@ -3,7 +3,7 @@ Introduction
 ************
 
 :Author: James McIntosh
-:Version: 0.0.1
+:Version: 0.0.2
 .. :Contact: 
    :Copyright:
    :License:
