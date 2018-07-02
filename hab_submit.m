@@ -165,10 +165,10 @@ try
         fprintf('Skipping actual sbatch command.\n');
     end
     %%
-    ssh2_struct = cleanup(ssh2_struct,localPath,auxf_dir);
+    ssh2_struct = hab_cleanup(ssh2_struct,localPath,auxf_dir);
     %%
 catch rerr
-    ssh2_struct = cleanup(ssh2_struct,localPath,auxf_dir);
+    ssh2_struct = hab_cleanup(ssh2_struct,localPath,auxf_dir);
     rethrow(rerr);
 end
 end
