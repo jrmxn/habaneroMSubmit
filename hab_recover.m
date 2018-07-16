@@ -70,10 +70,10 @@ try
     command = sprintf('rm %s', tar_file);
     [ssh2_struct, command_result] = ssh2_command(ssh2_struct, command, false);
     %%
-    ssh2_struct = cleanup(ssh2_struct, localPath, auxf_dir);
+    ssh2_struct = hab_cleanup(ssh2_struct, localPath, auxf_dir);
     %%
 catch reerr
-    ssh2_struct = cleanup(ssh2_struct, localPath, auxf_dir);
+    ssh2_struct = hab_cleanup(ssh2_struct, localPath, auxf_dir);
     rethrow(reerr);
 end
 end
