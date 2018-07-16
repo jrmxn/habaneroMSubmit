@@ -3,10 +3,7 @@ Introduction
 ************
 
 :Author: James McIntosh
-:Version: 0.0.3
-.. :Contact: 
-   :Copyright:
-   :License:
+:Version: 0.0.4
 
 
 Purpose
