@@ -16,7 +16,7 @@ These are basic scripts to automatically submit multiple parallel jobs to Columb
 Includes various temporary directory settings to try to make the parallelisation more stable.
 (Each folder has submission scripts for a different project).
 Should work with other SLURM systems but paths may require tweaking.
-Only tested on Ubuntu 18.04.
+Tested mainly on Ubuntu 18.04, although should now work on Windows systems too.
 
 Other info
 =======
