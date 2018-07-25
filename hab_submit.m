@@ -11,6 +11,7 @@ d.email = '';
 d.email_condition = 'NONE';%END
 d.jobname = '';
 d.remote_subdir = 'Local';%
+d.excludeCell = {};
 %%
 v = inputParser;
 addParameter(v,'n_par',d.n_par);
@@ -25,6 +26,8 @@ addParameter(v,'force_overwrite',d.force_overwrite);
 addParameter(v,'email',d.email);
 addParameter(v,'email_condition',d.email_condition);
 addParameter(v,'jobname',d.jobname);
+addParameter(v,'excludeCell',d.excludeCell);
+
 parse(v,varargin{:});
 v = v.Results;clear d;
 %%
@@ -78,6 +81,22 @@ try
     if not(target_exists)||v.force_overwrite
         fprintf('Copying directory to temp directory...\n');
         copyfile(matdir,locaPath_subdir);
+        %%
+        fprintf('Excluding folders from excludeCell...\n');
+        d_list = dir(locaPath_subdir);
+        rm_list = find(contains(d_list,v.excludeCell));
+        for ix_rm_list = 1:length(rm_list)
+            rm_name = d_list(rm_list(ix_rm_list)).name;
+            rm_path = fullfile(locaPath_subdir, rm_name);
+            if exist(rm_path,'file')==2
+                delete(rm_path);
+            elseif exist(rm_path,'dir') == 7
+                rmdir(rm_path,'s');
+            else
+                fprintf('Failed to exclude %s.\n', rm_name)
+            end
+        end
+        %%
         fprintf('Archiving it...\n');
         tar(fullfile(localPath,tar_file),locaPath_subdir);
         %% check that the parent directory exists
