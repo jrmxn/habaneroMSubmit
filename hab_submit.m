@@ -83,10 +83,10 @@ try
         copyfile(matdir,locaPath_subdir);
         %%
         fprintf('Excluding folders from excludeCell...\n');
-        d_list = dir(locaPath_subdir);
+        d_list = dir(locaPath_subdir);d_list = {d_list.name};
         rm_list = find(contains(d_list,v.excludeCell));
         for ix_rm_list = 1:length(rm_list)
-            rm_name = d_list(rm_list(ix_rm_list)).name;
+            rm_name = d_list{rm_list(ix_rm_list)};
             rm_path = fullfile(locaPath_subdir, rm_name);
             if exist(rm_path,'file')==2
                 delete(rm_path);
