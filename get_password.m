@@ -6,7 +6,7 @@ if ispc
 else
     userDir = char(java.lang.System.getProperty('user.home'));
 end
-d.pwmat_location = fullfile(userDir,'enc_mount','haba_pw.mat');
+d.pwmat_location = fullfile(userDir,'enc_haba_pw_mount','haba_pw.mat');
 %%
 v = inputParser;
 addParameter(v,'pwmat_location',d.pwmat_location);

@@ -40,8 +40,8 @@ remotePath = [v.scratch_dir, filesep_unix, account, filesep_unix, 'users'];
 remotePath_user = [remotePath, filesep_unix, user];
 remotePath_user_workdir = [remotePath_user, filesep_unix, v.remote_subdir];
 %%
-fprintf('Will try to send %s\nto HPC',matdir);
-fprintf('and run %s.m\n',matfunc);
+fprintf('Will try to send %s\nto HPC\n',matdir);
+fprintf('and run \n %s\n',matfunc);
 %%
 if isempty(v.jobname)
     job_id = sprintf('Job%d',randi(100000));
